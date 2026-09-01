@@ -1,1 +1,4 @@
+name: EE Flask app
 
+on:
+   ubuntu-latest
