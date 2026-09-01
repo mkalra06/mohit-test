@@ -1,0 +1,44 @@
+name: EE Flask app
+
+on:
+   push:
+     branches:
+        - main
+
+jobs:
+   build-and-test
+   runs-on: ubuntu-latest
+   steps:
+      - uses: actions/checkout@v5
+
+   name: Setup Python
+   uses: actions/python@v5
+   with:
+      python-version: '3.14'
+
+   name: Setup dependencies
+   run: |
+      python -m pip install --upgrade pip
+      pip install -r requirements.txt
+
+   name: Run pytest
+   run: pytest
+
+   name: build image
+   run: docker build -t flask-app .
+
+   name: create container
+   run: docker run -d -t 8080:8080 --name flask-app flask-app
+
+   name: check container is up?
+   run: for i in $(seq 1 10); do
+          if curl -fsS http://localhost:8080/octocat >> dev/null; then
+            exit 0;
+          fi
+            sleep 2;
+        done
+        docker logs flask-app
+        exit 1
+
+
+   
