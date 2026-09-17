@@ -66,10 +66,10 @@ jobs:
         run: docker pull mkalra/flaskapp:${{ github.run_number }}
 
       - name: Retag for prod repo
-        run: docker tag mkalra/flaskapp:${{ github.run_number }} mkr-ee/flaskapp:${{ github.run_number }}
+        run: docker tag mkalra/flaskapp:${{ github.run_number }} mkalra/mkr-ee:${{ github.run_number }}
 
       - name: Push to prod repo
-        run: docker push mkr-ee/flaskapp:${{ github.run_number }}
+        run: docker push mkalra/mkr-ee:${{ github.run_number }}
 
       - name: Docker logout
         run: docker logout
