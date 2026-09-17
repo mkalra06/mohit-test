@@ -53,3 +53,25 @@ jobs:
 
       - name: Docker logout
         run: docker logout
+
+  deploy-prod:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    environment: prod   # pauses for required-approver sign-off
+    steps:
+      - name: Log in to Docker Hub (prod credentials)
+        run: echo "${{ secrets.PROD_DOCKER_PWD }}" | docker login -u "${{ secrets.PROD_DOCKER_USER }}" --password-stdin
+
+      - name: Pull the tested image
+        run: |
+          echo "${{ secrets.DOCKER_PWD }}" | docker login -u "${{ secrets.DOCKER_USER }}" --password-stdin
+          docker pull mkalra/flaskapp:1.0.0
+
+      - name: Retag for prod repo
+        run: docker tag mkalra/flaskapp:1.0.0 mkr-ee/flaskapp:1.0.0
+
+      - name: Push to prod repo
+        run: docker push mkr-ee/flaskapp:1.0.0
+
+      - name: Docker logout
+        run: docker logout
