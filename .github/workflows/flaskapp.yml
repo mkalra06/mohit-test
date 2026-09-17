@@ -43,13 +43,13 @@ jobs:
           exit 1
 
       - name: Update the Image Tag
-        run: docker tag flask-app mkalra/flaskapp:1.0.0
+        run: docker tag flask-app mkalra/flaskapp:${{ github.run_number }}
 
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_PWD }}" | docker login -u "${{ secrets.DOCKER_USER }}" --password-stdin
 
       - name: Push the Image
-        run: docker push mkalra/flaskapp:1.0.0
+        run: docker push mkalra/flaskapp:${{ github.run_number }}
 
       - name: Docker logout
         run: docker logout
@@ -63,13 +63,13 @@ jobs:
         run: echo "${{ secrets.DOCKER_PWD }}" | docker login -u "${{ secrets.DOCKER_USER }}" --password-stdin
 
       - name: Pull the tested image
-        run: docker pull mkalra/flaskapp:1.0.0
+        run: docker pull mkalra/flaskapp:${{ github.run_number }}
 
       - name: Retag for prod repo
-        run: docker tag mkalra/flaskapp:1.0.0 mkr-ee/flaskapp:1.0.0
+        run: docker tag mkalra/flaskapp:${{ github.run_number }} mkr-ee/flaskapp:${{ github.run_number }}
 
       - name: Push to prod repo
-        run: docker push mkr-ee/flaskapp:1.0.0
+        run: docker push mkr-ee/flaskapp:${{ github.run_number }}
 
       - name: Docker logout
         run: docker logout
