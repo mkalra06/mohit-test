@@ -29,7 +29,7 @@ jobs:
         run: docker build -t flask-app .
 
       - name: Run docker container
-        run: docker run -d -p 8080:8080 --name flask-app flask-app
+        run: docker run -d -p 8080:8080 --name flask-app flask-app && sleep 10
 
       - name: Check the container is up
         run: |
