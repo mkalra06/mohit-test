@@ -1,5 +1,5 @@
-# Start from the official lightweight Python image, 3.14 unless overridden
-ARG PYTHON_VERSION=3.14
+# Start from the official lightweight Python image, 3.13 unless overridden
+ARG PYTHON_VERSION=3.13
 FROM python:${PYTHON_VERSION}-slim
 
 # No .pyc files, and don't buffer the logs

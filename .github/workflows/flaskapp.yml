@@ -8,14 +8,14 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v5
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.14'
+          python-version: '3.13'
 
       - name: Install dependencies
         run: |
@@ -41,3 +41,15 @@ jobs:
           done
           docker logs flask-app
           exit 1
+
+      - name: Update the Image Tag
+        run: docker tag flask-app mkalra/flaskapp:1.0.0
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PWD }}" | docker login -u "${{ secrets.DOCKER_USER }}" --password-stdin
+
+      - name: Push the Image
+        run: docker push mkalra/flaskapp:1.0.0
+
+      - name: Docker logout
+        run: docker logout
